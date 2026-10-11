@@ -4,6 +4,8 @@ All notable changes to MarchyBar are documented here. This project follows [Sema
 
 ## Unreleased
 
+- Keep every editor text field permanently read-only at the Qt level and handle keyboard edits without clipboard reads, preventing unsolicited Wayland clipboard offers from blocking the shared shell or exhausting memory. Clipboard paste and input-method composition are temporarily unavailable; typing, selection, navigation and numeric validation remain supported.
+
 ## 1.0.2 — 2026-10-07
 
 Security release for the privileged device broker. Administrators must install the matching reviewed `marchybar-system-1.0.2-1` package and run **Set up Touch Bar** again to update the installed helper.

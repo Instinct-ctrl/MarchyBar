@@ -143,6 +143,8 @@ npm test
 python tests/broker_test.py
 python tests/system_action_test.py
 tests/test-qml.sh
+# Standalone clipboard regressions (requires PySide6==6.12.0):
+python tests/qml/clipboard.py
 ```
 
 Run a separate, hardware-free preview backend:
@@ -156,6 +158,8 @@ MARCHYBAR_SOCKET=/tmp/marchybar-dev/control.sock bin/marchybar status
 The normal daemon deliberately refuses simulation. Preview mode never leases devices or executes OS actions. Do not run the renderer as root. Omarchy rejects symlinks inside plugin packages, so `node_modules` and build output are excluded from Git and installed builds use an external cache.
 
 Read [architecture and protocol](docs/ARCHITECTURE.md), [validation](docs/VALIDATION.md), and the [research brief](research/MarchyBar-Research-Brief.md).
+
+The editor currently accepts direct keyboard input only. Clipboard paste (including middle-click) and input-method composition are disabled to avoid unsolicited clipboard reads in the shared shell on Qt 6.12. Preset JSON import/export remains available for longer edits.
 
 ## Contributing and support
 

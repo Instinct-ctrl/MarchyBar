@@ -22,7 +22,7 @@ def function(source, name):
 
 with tempfile.TemporaryDirectory(prefix="marchybar qml %-そこ-") as directory:
     target = Path(directory)
-    for name in ["Editor.qml", "SettingNumber.qml", "Service.qml", "LockState.qml"]:
+    for name in ["Editor.qml", "KeyboardField.qml", "SettingNumber.qml", "Service.qml", "LockState.qml"]:
         (target / name).write_bytes((ROOT / name).read_bytes())
     (target / "bin").mkdir()
     (target / "bin/marchybar").write_text('#!/bin/bash\nprintf "MARCHYBAR_STUB_%s\\n" "$1" >&2\n')

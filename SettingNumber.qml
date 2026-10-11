@@ -1,7 +1,6 @@
 import QtQuick
-import qs.Ui as Ui
 
-Ui.TextField {
+KeyboardField {
   id: root
   property int savedValue: 0
   property int minimum: 0
@@ -17,7 +16,7 @@ Ui.TextField {
   // there is no local draft; never bind the editable text to the live snapshot.
   Component.onCompleted: text = String(savedValue)
   onSavedValueChanged: if (!editing) text = String(savedValue)
-  onTextEdited: { editing = true; editVersion++ }
+  onKeyboardEdited: { editing = true; editVersion++ }
   onEditingFinished: {
     if (!editing || pending) return
     if (!acceptableInput) return

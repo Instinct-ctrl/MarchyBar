@@ -68,17 +68,17 @@ ShellRoot {
     backend.snapshot = Object.assign({},backend.snapshot,{settings:{brightness:128}})
     var field=editor.brightnessEditor
     compare(field.text,"50")
-    field.text="7";field.textEdited()
+    field.text="7";field.keyboardEdited()
     backend.snapshot=Object.assign({},backend.snapshot,{settings:{brightness:200},data:{cpu:15}})
     compare(field.text,"7")
-    field.text="75";field.textEdited();field.editingFinished()
+    field.text="75";field.keyboardEdited();field.editingFinished()
     compare(backend.lastRequest.method,"settings.save")
     compare(backend.lastRequest.params.settings.brightness,191)
-    field.text="0";field.textEdited();field.editingFinished()
+    field.text="0";field.keyboardEdited();field.editingFinished()
     compare(backend.lastRequest.params.settings.brightness,0)
     backend.snapshot=Object.assign({},backend.snapshot,{settings:{brightness:0}})
     compare(field.text,"0")
-    field.text="101";field.textEdited();verify(!field.acceptableInput)
+    field.text="101";field.keyboardEdited();verify(!field.acceptableInput)
     field.editing=false
   }
   function test_dropdownChangesWidgetType() {

@@ -78,7 +78,7 @@ Item {
     // The host control assigns value before emitting changed, removing a plain binding.
     Binding { target: dropdown; property: "value"; value: dropdown.modelValue; restoreMode: Binding.RestoreNone }
   }
-  component DraftField: Ui.TextField {
+  component DraftField: KeyboardField {
     id: field
     property var applyValue
     property bool pendingEdit: false
@@ -89,7 +89,7 @@ Item {
       try { applyValue(text) } catch (e) { root.notice = String(e); forceActiveFocus(); return false }
       clearEdit(); return true
     }
-    onTextEdited: { if (!pendingEdit) { pendingEdit = true; root.pendingFields = root.pendingFields.concat([field]) } }
+    onKeyboardEdited: { if (!pendingEdit) { pendingEdit = true; root.pendingFields = root.pendingFields.concat([field]) } }
     onEditingFinished: commitEdit()
     Component.onDestruction: clearEdit()
   }
@@ -292,11 +292,11 @@ Item {
           ColumnLayout {
             Layout.fillWidth:true; Layout.fillHeight:true; spacing:14; visible:root.draft!==null
             RowLayout {
-              Ui.TextField { Layout.fillWidth:true; text:root.draft ? root.draft.name : ""; objectName:"presetName"; placeholderText:"Preset name"; onTextEdited:root.mutate(d=>{d.name=text}) }
+              KeyboardField { Layout.fillWidth:true; text:root.draft ? root.draft.name : ""; objectName:"presetName"; placeholderText:"Preset name"; onKeyboardEdited:root.mutate(d=>{d.name=text}) }
               Button { text:"Duplicate"; onClicked:{var from=root.draft.id;var name=root.draft.name;root.guard(()=>root.prompt("Duplicate saved preset",name+" copy",value=>root.call("preset.create",{name:value,from:from},(ok,p)=>{if(ok)root.load(p.id)})))} }
               Button { text:"Export"; tooltipText:"Export the saved version"; onClicked:{root.exporting=true;fileDialog.open()} }
             }
-            Ui.TextField { Layout.fillWidth:true; text:root.draft ? root.draft.description || "" : ""; placeholderText:"A short description"; onTextEdited:root.mutate(d=>{d.description=text}) }
+            KeyboardField { Layout.fillWidth:true; text:root.draft ? root.draft.description || "" : ""; placeholderText:"A short description"; onKeyboardEdited:root.mutate(d=>{d.description=text}) }
             RowLayout {
               Dropdown { Layout.fillWidth:true; options:root.pageOptions; modelValue:root.page?root.page.id:""; onChanged:value=>root.selectPage(root.draft.pages.findIndex(p=>p.id===value)) }
               Button { text:"+ Page"; onClicked:{if(!root.commitFields())return;root.prompt("New page","New page",name=>{root.mutate(d=>d.pages.push({id:"page-"+Date.now(),name:name,widgets:[{id:"clock",type:"clock",weight:1}]}));root.pageIndex=root.draft.pages.length-1;root.widgetIndex=0})} }
@@ -375,7 +375,7 @@ Item {
                     Button { text:"→"; tooltipText:"Move right"; onClicked:root.moveWidget(root.widgetIndex,root.widgetIndex+1) }
                     Button { text:"Remove"; enabled:root.page && root.page.widgets.length>1; onClicked:{if(!root.commitFields())return;root.mutate(d=>d.pages[root.pageIndex].widgets.splice(root.widgetIndex,1));root.widgetIndex=Math.max(0,root.widgetIndex-1)} }
                   }
-                  Ui.TextField { Layout.fillWidth:true; text:root.widget?root.widget.label || "":""; placeholderText:"Widget label"; onTextEdited:root.changeWidget("label",text) }
+                  KeyboardField { Layout.fillWidth:true; text:root.widget?root.widget.label || "":""; placeholderText:"Widget label"; onKeyboardEdited:root.changeWidget("label",text) }
                   RowLayout {
                     Hint { text:"Width" }
                     DraftField { Layout.preferredWidth:70; text:root.widget?String(root.widget.weight):"1"; validator:DoubleValidator {bottom:0.25;top:12;decimals:2} applyValue:value=>root.changeWidget("weight",Number.fromLocaleString(Qt.locale(validator.locale),value)) }
@@ -386,7 +386,7 @@ Item {
                     visible:Boolean(root.widget && root.widget.type==="button"); Layout.fillWidth:true; spacing:10
                     Hint { text:"ON TAP" }
                     Dropdown { Layout.fillWidth:true; options:["key","media","workspace","launch","command","preset","page"]; modelValue:root.widget && root.widget.action?root.widget.action.type:"key"; onChanged:value=>{if(root.commitFields())root.changeWidget("action",root.defaultAction(value))} }
-                    Ui.TextField { Layout.fillWidth:true; visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="key"); text:root.widget && root.widget.action?root.widget.action.key || "":""; placeholderText:"Key (Return, F1, s…)"; onTextEdited:root.actionField("key",text) }
+                    KeyboardField { Layout.fillWidth:true; visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="key"); text:root.widget && root.widget.action?root.widget.action.key || "":""; placeholderText:"Key (Return, F1, s…)"; onKeyboardEdited:root.actionField("key",text) }
                     RowLayout {
                       visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="key")
                       Repeater { model:["ctrl","alt","shift","logo"]
@@ -395,7 +395,7 @@ Item {
                     }
                     Dropdown { visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="media"); Layout.fillWidth:true; options:["play-pause","previous","next","stop"]; modelValue:root.widget && root.widget.action?root.widget.action.command || "play-pause":"play-pause"; onChanged:value=>root.actionField("command",value) }
                     DraftField { Layout.fillWidth:true; visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="workspace"); text:root.widget && root.widget.action?String(root.widget.action.workspace||1):"1"; validator:IntValidator {bottom:1;top:99} applyValue:value=>root.actionField("workspace",Number.fromLocaleString(Qt.locale(validator.locale),value)) }
-                    Ui.TextField { Layout.fillWidth:true; visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="launch"); text:root.widget && root.widget.action?root.widget.action.desktop || "":""; placeholderText:"Application desktop ID"; onTextEdited:root.actionField("desktop",text) }
+                    KeyboardField { Layout.fillWidth:true; visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="launch"); text:root.widget && root.widget.action?root.widget.action.desktop || "":""; placeholderText:"Application desktop ID"; onKeyboardEdited:root.actionField("desktop",text) }
                     DraftField { Layout.fillWidth:true; visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="command"); text:root.widget && root.widget.action?JSON.stringify(root.widget.action.argv || []):"[]"; placeholderText:'["program", "argument"]'; applyValue:value=>{var argv=JSON.parse(value);if(!Array.isArray(argv)||!argv.length||argv.some(a=>typeof a!=="string"))throw new Error("Use a JSON array of command arguments");root.actionField("argv",argv)} }
                     Button { visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="command"); text:"Run independently"; selected:Boolean(root.widget && root.widget.action && root.widget.action.detached); tooltipText:"For applications that stay open. Do not wait for exit or capture output."; onClicked:root.actionField("detached",!root.widget.action.detached) }
                     Dropdown { visible:Boolean(root.widget && root.widget.action && root.widget.action.type==="preset"); Layout.fillWidth:true; options:root.presetOptions; modelValue:root.widget && root.widget.action?root.widget.action.preset || "everyday":"everyday"; onChanged:value=>root.actionField("preset",value) }
@@ -438,15 +438,15 @@ Item {
                   Layout.fillWidth:true; spacing:8
                   RowLayout {
                     Ui.ToggleSwitch { checked:ruleRow.modelData.enabled; onToggled:root.editRule(ruleRow.index,"enabled",!checked) }
-                    Ui.TextField { Layout.fillWidth:true; text:ruleRow.modelData.name; placeholderText:"Rule name"; onTextEdited:root.editRuleText(ruleRow.modelData.id,"name",text) }
+                    KeyboardField { Layout.fillWidth:true; text:ruleRow.modelData.name; placeholderText:"Rule name"; onKeyboardEdited:root.editRuleText(ruleRow.modelData.id,"name",text) }
                     Dropdown { Layout.preferredWidth:200; options:root.presetOptions; modelValue:ruleRow.modelData.preset; onChanged:value=>root.editRule(ruleRow.index,"preset",value) }
                     Button { text:"↑"; onClicked:root.moveRule(ruleRow.index,-1) }
                     Button { text:"↓"; onClicked:root.moveRule(ruleRow.index,1) }
                     Button { text:"Remove"; onClicked:{var r=root.copy(root.editedRules);r.splice(ruleRow.index,1);root.ruleTextEdits=({});root.ruleDraft=r} }
                   }
                   RowLayout {
-                    Ui.TextField { Layout.fillWidth:true; text:ruleRow.modelData.app; placeholderText:"Application pattern"; onTextEdited:root.editRuleText(ruleRow.modelData.id,"app",text) }
-                    Ui.TextField { Layout.fillWidth:true; text:ruleRow.modelData.title; placeholderText:"Window title contains (optional)"; onTextEdited:root.editRuleText(ruleRow.modelData.id,"title",text) }
+                    KeyboardField { Layout.fillWidth:true; text:ruleRow.modelData.app; placeholderText:"Application pattern"; onKeyboardEdited:root.editRuleText(ruleRow.modelData.id,"app",text) }
+                    KeyboardField { Layout.fillWidth:true; text:ruleRow.modelData.title; placeholderText:"Window title contains (optional)"; onKeyboardEdited:root.editRuleText(ruleRow.modelData.id,"title",text) }
                   }
                   Line {}
                 }
@@ -509,7 +509,7 @@ Item {
           id:dialogContent; anchors.left:parent.left;anchors.right:parent.right;anchors.top:parent.top;anchors.margins:24;spacing:16
           Label { text:root.promptVisible?root.promptTitle:root.confirmTitle; font.bold:true; Layout.fillWidth:true }
           Label { visible:!root.promptVisible; text:root.confirmText; Layout.fillWidth:true }
-          Ui.TextField { id:promptField; objectName:"promptField"; visible:root.promptVisible; Layout.fillWidth:true; text:root.promptValue; onTextEdited:root.promptValue=text; onAccepted:if(root.promptValue.trim()){var action=root.promptAction;root.promptVisible=false;action(root.promptValue.trim())} }
+          KeyboardField { id:promptField; objectName:"promptField"; visible:root.promptVisible; Layout.fillWidth:true; text:root.promptValue; onKeyboardEdited:root.promptValue=text; onAccepted:if(root.promptValue.trim()){var action=root.promptAction;root.promptVisible=false;action(root.promptValue.trim())} }
           RowLayout {
             Item { Layout.fillWidth:true }
             Button { id:cancelButton; text:"Cancel"; onClicked:{root.confirmAction=null;root.promptVisible=false} }
