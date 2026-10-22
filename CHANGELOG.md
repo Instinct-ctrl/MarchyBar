@@ -9,6 +9,7 @@ All notable changes to MarchyBar are documented here. This project follows [Sema
 - Document the compatibility review for Omarchy 4.0.5, 4.0.6 and 4.5.0-rc1 (source review only, no hardware).
 - Add Dependabot updates for npm and GitHub Actions.
 - Keep every editor text field permanently read-only at the Qt level and handle keyboard edits without clipboard reads, preventing unsolicited Wayland clipboard offers from blocking the shared shell or exhausting memory. Clipboard paste and input-method composition are temporarily unavailable; typing, selection, navigation and numeric validation remain supported.
+- Raise the minimum Node version to 22.22.2 (or 24.15.0, or 26 and later) to match node-gyp 13, which builds the native renderer on first launch. Older Node 22 releases are no longer supported. CI already runs the latest Node 22 and 24.
 
 ## 1.0.2 — 2026-10-07
 

@@ -32,7 +32,7 @@ Install dependencies from Arch repositories:
 omarchy pkg add nodejs npm base-devel pkgconf cairo libdrm pango librsvg python-gobject acl brightnessctl playerctl wtype libpulse
 ```
 
-Node 22 or newer is required; an existing compatible Node installation also works. Omarchy supplies Quickshell, Hyprland, systemd, and the native shell controls.
+Node 22.22.2, 24.15.0, or 26 and later is required; an existing compatible Node installation also works. Omarchy supplies Quickshell, Hyprland, systemd, and the native shell controls.
 
 Install MarchyBar:
 
