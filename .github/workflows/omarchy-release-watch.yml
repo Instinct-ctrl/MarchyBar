@@ -1,0 +1,46 @@
+name: Omarchy release watch
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  watch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Open an issue for each new Omarchy release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          keywords='plugin|quickshell|qt ?6|touch ?bar|tiny-dfr|appletbdrm|t2|linux-t2|kernel|hyprland|workspace|manifest|migration|node|mise|breaking|deprecat'
+          gh api 'repos/omacom/omarchy/releases?per_page=10' --jq '.[] | select(.draft|not) | [.tag_name, .prerelease, .html_url, .published_at] | @tsv' |
+          while IFS=$'\t' read -r tag pre url published; do
+            # Only releases from the last 14 days, so enabling this does not flood the tracker.
+            if [ "$(date -d "$published" +%s)" -lt "$(date -d '14 days ago' +%s)" ]; then continue; fi
+            title="Omarchy $tag compatibility review"
+            existing=$(gh issue list -R "$REPO" --state all --search "\"$title\" in:title" --json title --jq "map(select(.title==\"$title\"))|length")
+            if [ "$existing" != "0" ]; then continue; fi
+            notes=$(gh api "repos/omacom/omarchy/releases/tags/$tag" --jq .body)
+            hits=$(printf '%s\n' "$notes" | grep -E -i "$keywords" | head -40 | sed 's/^/> /' || true)
+            kind=$([ "$pre" = "true" ] && echo "pre-release" || echo "stable release")
+            {
+              echo "Omarchy [$tag]($url) ($kind) was published $published."
+              echo
+              echo "Release notes lines that mention areas MarchyBar depends on (plugin API, Quickshell/Qt, workspaces, T2/kernel, Touch Bar, Node):"
+              echo
+              if [ -n "$hits" ]; then printf '%s\n' "$hits"; else echo "> (none matched)"; fi
+              echo
+              echo "Checklist:"
+              echo "- [ ] Read the full release notes"
+              echo "- [ ] Check backend/live.mjs hyprctl, omarchy CLI calls and workspace handling"
+              echo "- [ ] Check Service.qml and LockState.qml plugin APIs (qs.Commons, IPC)"
+              echo "- [ ] Update README compatibility target and docs/VALIDATION.md"
+              echo
+              echo "Created automatically by the Omarchy release watch workflow."
+            } > body.md
+            gh issue create -R "$REPO" --title "$title" --body-file body.md
+          done
