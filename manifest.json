@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "marchybar.touchbar",
+  "id": "io.github.thomasbrugman.marchybar",
   "name": "MarchyBar",
   "version": "1.0.2",
   "author": "thomasbrugman",

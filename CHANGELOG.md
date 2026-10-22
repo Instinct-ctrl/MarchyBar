@@ -4,6 +4,7 @@ All notable changes to MarchyBar are documented here. This project follows [Sema
 
 ## Unreleased
 
+- Rename the plugin ID from `marchybar.touchbar` to `io.github.thomasbrugman.marchybar`, the namespaced form the Omarchy plugin marketplace asks for. `marchybar update` finds installs under either folder name. Existing installs need to re-enable the plugin or reinstall; see the README. Not tested on a running Omarchy install or hardware.
 - Support Omarchy 4.5 per-monitor workspaces: when Omarchy's `monitor-workspaces` state file exists, the Touch Bar workspace widget shows only the focused monitor's workspaces, labelled 1-10 like the Omarchy bar, and taps still focus the global workspace id. Omarchy 4.0.x behavior is unchanged. Verified from the Omarchy v4.5.0-rc1 source and unit tests only, not on hardware.
 - Update the repository owner in plugin metadata, install instructions, and CODEOWNERS to `thomasbrugman` after the GitHub username change.
 - Document the compatibility review for Omarchy 4.0.5, 4.0.6 and 4.5.0-rc1 (source review only, no hardware).

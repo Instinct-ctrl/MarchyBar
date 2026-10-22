@@ -4,7 +4,7 @@ import qs.Commons
 
 Ui.BarWidget {
   id: root
-  moduleName: "marchybar.touchbar"
+  moduleName: "io.github.thomasbrugman.marchybar"
   readonly property var service: bar && bar.shell ? bar.shell.serviceFor(moduleName) : null
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight

@@ -18,7 +18,7 @@ if (path.basename(process.argv[1]) === 'git') {
   fs.appendFileSync(home + '/calls', JSON.stringify(args) + '\\n');
   const command = args.join(' ');
   if (command === 'update') process.exit(Number(process.env.SYSTEM_RC || 0));
-  if (command === 'plugin update marchybar.touchbar') {
+  if (command.startsWith('plugin update ')) {
     if (process.env.CHANGED === '1') fs.writeFileSync(home + '/head', 'new');
     process.exit(Number(process.env.PLUGIN_RC || 0));
   }
@@ -28,15 +28,16 @@ if (path.basename(process.argv[1]) === 'git') {
 `;
 
 for (const scenario of [
-  { name: 'changed plugin restarts the shell', changed: true, calls: ['plugin update marchybar.touchbar', 'restart shell'] },
-  { name: 'unchanged or declined plugin does not restart', calls: ['plugin update marchybar.touchbar'] },
-  { name: 'combined update activates plugin before Omarchy can reboot', combined: true, changed: true, calls: ['plugin update marchybar.touchbar', 'restart shell', 'update'] },
-  { name: 'unchanged combined update needs no extra restart', combined: true, calls: ['plugin update marchybar.touchbar', 'update'] },
-  { name: 'failed system update leaves plugin activated', combined: true, changed: true, system: 7, status: 7, calls: ['plugin update marchybar.touchbar', 'restart shell', 'update'] },
-  { name: 'failed plugin update stops combined update', combined: true, plugin: 3, status: 3, calls: ['plugin update marchybar.touchbar'] },
-  { name: 'failed plugin update does not restart unchanged code', plugin: 3, status: 3, calls: ['plugin update marchybar.touchbar'] },
-  { name: 'failed rescan still restarts changed code and reports failure', changed: true, plugin: 4, status: 4, calls: ['plugin update marchybar.touchbar', 'restart shell'] },
-  { name: 'locked or failed restart reports the pending command', changed: true, restart: 1, status: 1, calls: ['plugin update marchybar.touchbar', 'restart shell'], error: /Unlock the desktop and run: omarchy restart shell/ },
+  { name: 'changed plugin restarts the shell', changed: true, calls: ['plugin update io.github.thomasbrugman.marchybar', 'restart shell'] },
+  { name: 'unchanged or declined plugin does not restart', calls: ['plugin update io.github.thomasbrugman.marchybar'] },
+  { name: 'combined update activates plugin before Omarchy can reboot', combined: true, changed: true, calls: ['plugin update io.github.thomasbrugman.marchybar', 'restart shell', 'update'] },
+  { name: 'unchanged combined update needs no extra restart', combined: true, calls: ['plugin update io.github.thomasbrugman.marchybar', 'update'] },
+  { name: 'failed system update leaves plugin activated', combined: true, changed: true, system: 7, status: 7, calls: ['plugin update io.github.thomasbrugman.marchybar', 'restart shell', 'update'] },
+  { name: 'failed plugin update stops combined update', combined: true, plugin: 3, status: 3, calls: ['plugin update io.github.thomasbrugman.marchybar'] },
+  { name: 'failed plugin update does not restart unchanged code', plugin: 3, status: 3, calls: ['plugin update io.github.thomasbrugman.marchybar'] },
+  { name: 'failed rescan still restarts changed code and reports failure', changed: true, plugin: 4, status: 4, calls: ['plugin update io.github.thomasbrugman.marchybar', 'restart shell'] },
+  { name: 'locked or failed restart reports the pending command', changed: true, restart: 1, status: 1, calls: ['plugin update io.github.thomasbrugman.marchybar', 'restart shell'], error: /Unlock the desktop and run: omarchy restart shell/ },
+  { name: 'installation from before the ID change still updates', legacy: true, calls: ['plugin update marchybar.touchbar'] },
   { name: 'unknown options do not run updates', args: ['--yes'], status: 2, calls: [] },
   { name: 'extra arguments do not run updates', args: ['--with-omarchy', 'extra'], status: 2, calls: [] },
   { name: 'unmanaged installation does not run updates', unmanaged: true, status: 1, calls: [] },
@@ -45,7 +46,7 @@ for (const scenario of [
     const home = fs.mkdtempSync(path.join(os.tmpdir(), 'marchybar-update-'));
     t.after(() => fs.rmSync(home, { recursive: true, force: true }));
     fs.mkdirSync(path.join(home, 'bin'));
-    if (!scenario.unmanaged) fs.mkdirSync(path.join(home, '.config/omarchy/plugins/marchybar.touchbar/.git'), { recursive: true });
+    if (!scenario.unmanaged) fs.mkdirSync(path.join(home, '.config/omarchy/plugins', scenario.legacy ? 'marchybar.touchbar' : 'io.github.thomasbrugman.marchybar', '.git'), { recursive: true });
     for (const name of ['git', 'omarchy']) fs.writeFileSync(path.join(home, 'bin', name), stub, { mode: 0o755 });
     fs.writeFileSync(path.join(home, 'head'), 'old');
     fs.writeFileSync(path.join(home, 'calls'), '');
