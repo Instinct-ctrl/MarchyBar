@@ -5,6 +5,9 @@ All notable changes to MarchyBar are documented here. This project follows [Sema
 ## Unreleased
 
 - Support Omarchy 4.5 per-monitor workspaces: when Omarchy's `monitor-workspaces` state file exists, the Touch Bar workspace widget shows only the focused monitor's workspaces, labelled 1-10 like the Omarchy bar, and taps still focus the global workspace id. Omarchy 4.0.x behavior is unchanged. Verified from the Omarchy v4.5.0-rc1 source and unit tests only, not on hardware.
+- Update the repository owner in plugin metadata, install instructions, and CODEOWNERS to `thomasbrugman` after the GitHub username change.
+- Document the compatibility review for Omarchy 4.0.5, 4.0.6 and 4.5.0-rc1 (source review only, no hardware).
+- Add Dependabot updates for npm and GitHub Actions.
 - Keep every editor text field permanently read-only at the Qt level and handle keyboard edits without clipboard reads, preventing unsolicited Wayland clipboard offers from blocking the shared shell or exhausting memory. Clipboard paste and input-method composition are temporarily unavailable; typing, selection, navigation and numeric validation remain supported.
 
 ## 1.0.2 — 2026-10-07
