@@ -4,7 +4,9 @@ Your Touch Bar, at home in Omarchy.
 
 MarchyBar is a native Omarchy shell plugin for Intel T2 MacBook Pro computers. It combines an editable Touch Bar with live controls, automatic app layouts, and an Omarchy-themed preset editor.
 
-**Compatibility target:** latest stable Omarchy (4.0.4), with the T2 Linux kernel (`linux-t2`) and `appletbdrm`. Omarchy 4.0.4 migrates other machines to `linux-omarchy` but keeps T2 Macs on `linux-t2`; MarchyBar refuses hardware enablement with a recovery hint when a supported model boots any other kernel. Targets MacBookPro15,1–15,4 and MacBookPro16,1–16,4. Both 2170×60 and 2008×60 logical panels are supported; the renderer discovers actual DRM geometry and input ranges. See [validation](docs/VALIDATION.md) for the distinction between tested behavior and physical model coverage.
+**Compatibility target:** latest stable Omarchy (4.0.6), with the T2 Linux kernel (`linux-t2`) and `appletbdrm`. Omarchy 4.0.4 migrates other machines to `linux-omarchy` but keeps T2 Macs on `linux-t2`; MarchyBar refuses hardware enablement with a recovery hint when a supported model boots any other kernel. Targets MacBookPro15,1–15,4 and MacBookPro16,1–16,4. Both 2170×60 and 2008×60 logical panels are supported; the renderer discovers actual DRM geometry and input ranges. See [validation](docs/VALIDATION.md) for the distinction between tested behavior and physical model coverage.
+
+Omarchy 4.5 RC1 (release candidate) has been reviewed against its source only. It has not been run on a T2 Mac. See [validation](docs/VALIDATION.md).
 
 ![MarchyBar native preset editor](preview.png)
 
@@ -35,10 +37,10 @@ Node 22 or newer is required; an existing compatible Node installation also work
 Install MarchyBar:
 
 ```sh
-omarchy plugin add https://github.com/Githubguy132010/MarchyBar --enable
+omarchy plugin add https://github.com/thomasbrugman/MarchyBar --enable
 ```
 
-The current release is **v1.0.2**. See [releases](https://github.com/Githubguy132010/MarchyBar/releases) for changes.
+The current release is **v1.0.2**. See [releases](https://github.com/thomasbrugman/MarchyBar/releases) for changes.
 
 Click **▰** in the Omarchy bar. The first launch builds a small native renderer in your user cache; subsequent launches reuse it. Install the trusted system package described below, then open **Device → Set up Touch Bar**, authenticate the device configuration, and enable the bar. An existing `tiny-dfr` or `touchbard` process must be stopped before enabling MarchyBar.
 
@@ -163,7 +165,7 @@ The editor currently accepts direct keyboard input only. Clipboard paste (includ
 
 ## Contributing and support
 
-Bug reports and contributions are welcome through [GitHub issues](https://github.com/Githubguy132010/MarchyBar/issues) and pull requests. Include your Mac model, Omarchy and kernel versions, reproduction steps, and relevant diagnostics. Review diagnostics before sharing them. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development checks.
+Bug reports and contributions are welcome through [GitHub issues](https://github.com/thomasbrugman/MarchyBar/issues) and pull requests. Include your Mac model, Omarchy and kernel versions, reproduction steps, and relevant diagnostics. Review diagnostics before sharing them. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development checks.
 
 ## License
 

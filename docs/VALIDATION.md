@@ -2,6 +2,13 @@
 
 Snapshot: 5 September 2026. This is a working first implementation, not a claim that eight physical machines were tested.
 
+## Omarchy 4.0.5, 4.0.6 and 4.5.0-rc1 review — 22 October 2026
+
+No T2 Mac was available for this review. Everything below comes from reading release notes and source, not from running MarchyBar.
+
+- **4.0.5 (18 October) and 4.0.6 (19 October):** Qt 6.12, fixes for third-party shell plugins under Qt 6.12, and migration fixes. MarchyBar only uses public plugin APIs (`Quickshell`, `qs.Commons` colors, the public `omarchy-shell lock isLocked` endpoint, a manifest without private source metadata), so no code change was found necessary. CI already runs the QML clipboard test on PySide6 6.12.0. Not tested on a running 4.0.5 or 4.0.6 system.
+- **4.5.0-rc1 (20 October, pre-release):** each monitor now owns its own block of ten workspaces. The Touch Bar workspace widget is adjusted for this in a separate change. `omarchy audio output sink`, `omarchy brightness display --no-osd N%` and the update terminal launch (`uwsm-app -- xdg-terminal-exec --app-id=org.omarchy.terminal`) still exist in the RC1 source. `omarchy brightness display` now acts on the focused display. Still unchecked: whether `node` stays on `PATH` after 4.5 installs Node lazily, and the `qs.Commons` color names on 4.5.
+
 ## Omarchy 4.0.4 compatibility — 19 September 2026
 
 Omarchy 4.0.4 ships the bespoke `linux-omarchy` kernel for most machines but explicitly keeps T2 Macs on `linux-t2`, guarantees matching `linux-t2-headers`, and orders Limine `BOOT_ORDER` with `linux-t2` first. No plugin API changes ship in v4.0.3…v4.0.4, so the 4.0.3 service-startup and public lock-IPC fixes carry over unchanged.
