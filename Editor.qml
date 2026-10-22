@@ -14,7 +14,7 @@ Item {
   property string omarchyPath: ""
   property var pluginRegistry: null
   property var barWidgetRegistry: null
-  property var service: shell ? shell.serviceFor("marchybar.touchbar") : null
+  property var service: shell ? shell.serviceFor("io.github.thomasbrugman.marchybar") : null
   readonly property var model: service ? service.snapshot : ({presets: [], rules: [], settings: {}, data: {}, hardware: {}})
   property bool opened: false
   property int tab: 0

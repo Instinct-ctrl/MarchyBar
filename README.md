@@ -85,7 +85,7 @@ A right click on the bar icon resumes Automatic mode. The Touch Bar's rightmost 
 
 ## Command line
 
-The installed entry point is `~/.config/omarchy/plugins/marchybar.touchbar/bin/marchybar`. You may symlink **this executable** into `~/.local/bin`; don't put symlinks inside the plugin directory.
+The installed entry point is `~/.config/omarchy/plugins/io.github.thomasbrugman.marchybar/bin/marchybar`. You may symlink **this executable** into `~/.local/bin`; don't put symlinks inside the plugin directory.
 
 ```sh
 marchybar open
@@ -122,6 +122,19 @@ When the plugin revision changes, MarchyBar restarts the shell to load the new c
 
 If a release changes the device helper, have the administrator install the matching reviewed system package, then run **Set up Touch Bar** again. Mismatched helper hashes fail closed. Updates never install privileged helper files automatically. The source, preset, and control protocol versions are explicit.
 
+## Upgrading from a version that used the old plugin ID
+
+The plugin ID changed from `marchybar.touchbar` to `io.github.thomasbrugman.marchybar` after 1.0.2. Omarchy names the plugin folder and the shell's enabled list after the ID, so an existing install needs one extra step. Your presets in `~/.config/marchybar` are not affected, and neither is the device helper.
+
+The clean way is to reinstall.
+
+```sh
+omarchy plugin remove marchybar.touchbar --yes
+omarchy plugin add https://github.com/thomasbrugman/MarchyBar --enable
+```
+
+If you ran `marchybar update` or `omarchy plugin update marchybar.touchbar` instead, the old folder keeps its name and `marchybar update` still finds it. Enable the plugin under its new ID with `omarchy plugin enable io.github.thomasbrugman.marchybar`. The migration notes come from reading the Omarchy 4.0.6 plugin scripts and the shell's plugin registry. They have not been tested on a real install.
+
 ## Disable or uninstall
 
 Disabling the Touch Bar closes the renderer and restores the previous USB mode and brightness. To remove the helper and plugin while preserving presets:
@@ -129,7 +142,7 @@ Disabling the Touch Bar closes the renderer and restores the previous USB mode a
 ```sh
 marchybar disable
 marchybar uninstall-system
-omarchy plugin remove marchybar.touchbar --yes
+omarchy plugin remove io.github.thomasbrugman.marchybar --yes
 ```
 
 After `uninstall-system` succeeds, the administrator may remove `marchybar-system` with the package manager. Keep the package installed until device cleanup succeeds.

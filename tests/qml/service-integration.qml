@@ -6,7 +6,7 @@ ShellRoot {
   property int phase: 0
   Service {
     id: service
-    manifest: ({id: "marchybar.touchbar"})
+    manifest: ({id: "io.github.thomasbrugman.marchybar"})
     // Match 4.0.3's public API: no private lock service or source directory.
     shell: QtObject { function firstPartyServiceFor(id) { return null } }
     Component.onCompleted: lockService.probeCommand = ["sh", "-c", "printf false"]

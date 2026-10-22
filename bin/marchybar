@@ -51,7 +51,7 @@ case "$action" in
   prepare) prepare ;;
   daemon) prepare; exec node "$MARCHYBAR_ROOT/backend/server.mjs" "$@" ;;
   preview) prepare; exec node "$MARCHYBAR_ROOT/backend/server.mjs" --preview "$@" ;;
-  open) exec omarchy-shell shell summon marchybar.touchbar '{}' ;;
+  open) exec omarchy-shell shell summon io.github.thomasbrugman.marchybar '{}' ;;
   setup) exec /usr/bin/python3 -I "$MARCHYBAR_ROOT/bin/system-action.py" setup "$@" ;;
   update) exec /bin/bash "$MARCHYBAR_ROOT/bin/update.sh" "$@" ;;
   uninstall-system) exec /usr/bin/python3 -I "$MARCHYBAR_ROOT/bin/system-action.py" remove "$@" ;;
